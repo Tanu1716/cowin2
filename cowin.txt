@@ -1,0 +1,43 @@
+var today=new Date(); var trialCounter = 1; 
+  
+  const sleepNow = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
+  
+  function httpGet(theUrl)
+  {
+      var xmlHttp = new XMLHttpRequest();
+      xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+      xmlHttp.send( null );
+      return xmlHttp.responseText;
+  }
+  
+  async function fetchByPincode() {
+      console.log("Check: ", trialCounter++);
+     
+        for (j=1; j < 2; j++) {
+                  console.log('Script Initialising');
+          url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=294&date=11-05-2021";         await sleepNow(1100);
+          a = httpGet(url);
+          try {
+            a = JSON.parse(a)
+          } catch(e) {
+            continue;
+          } 
+          var audio = new Audio('https://media.geeksforgeeks.org/wp-content/uploads/20190531135120/beep.mp3');
+          for (c in a.centers) {
+        for (s in a.centers[c].sessions) {
+              if (a.centers[c].sessions[s].min_age_limit < 45 && a.centers[c].sessions[s].available_capacity > 0) {
+                console.log("Trying Booking for",a.centers[c].sessions[s].date, a.centers[c].pincode, a.centers[c].name, a.centers[c].sessions[s].available_capacity, a.centers[c].sessions[s].vaccine, a.centers[c].sessions[s].min_age_limit);
+                
+                audio.play();
+              }
+                }
+            } e=null;audio=null;
+          }
+        
+      
+     await sleepNow(10000);
+      fetchByPincode();
+  }
+  
+  console.log('Script Initialising');
+  fetchByPincode();
